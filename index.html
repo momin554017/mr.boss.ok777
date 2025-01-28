@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💚 MR-MOMIN এর TikTok Downloader 🎀</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #d4f4dd, #92d7b9);
+            color: #2b2b2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 28px;
+            color: #2b8a64;
+            text-shadow: 1px 1px 3px rgba(43, 138, 100, 0.6);
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #2b8a64;
+            border-radius: 20px;
+            background: #ffffff;
+            color: #2b2b2b;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #45b283;
+            outline: none;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background: #2b8a64;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #45b283;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #video-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dev-message {
+            font-size: 14px;
+            color: #4a4a4a;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #2b8a64;
+        }
+
+        .admin-btn {
+            margin-top: 15px;
+            padding: 12px;
+            width: 100%;
+            background: transparent;
+            color: #2b8a64;
+            border: 2px solid #2b8a64;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background: #2b8a64;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>💚 MR-MOMIN এর TikTok Downloader</h1>
+        <p class="subtitle">TikTok লিঙ্কটি পেস্ট করুন এবং ওয়াটারমার্ক ছাড়া ডাউনলোড করুন।</p>
+
+        <input type="text" id="url" placeholder="🎥 TikTok লিঙ্ক দিন...">
+        <button class="download-btn" onclick="fetchVideo()">📥 ডাউনলোড</button>
+
+        <div id="video-container">
+            <video id="tiktok-video" controls></video>
+            <button class="download-btn" id="download-video">📥 ভিডিও ডাউনলোড</button>
+            <button class="download-btn" id="download-audio">🎵 অডিও ডাউনলোড</button>
+        </div>
+
+        <p class="dev-message">👨‍💻 ডেভেলপ করেছেন <span class="highlight">MR-MOMIN</span> | নিরাপদ থাকুন 💚</p>
+        <button class="admin-btn" onclick="redirectToTelegram()">✉️ অ্যাডমিনের সাথে যোগাযোগ</button>
+    </div>
+
+    <script>
+        async function fetchVideo() {
+            const url = document.getElementById('url').value;
+            if (!url) {
+                alert("একটি বৈধ TikTok লিঙ্ক দিন!");
+                return;
+            }
+
+            try {
+                let response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                let data = await response.json();
+
+                if (data && data.data && data.data.play) {
+                    const videoUrl = data.data.play;
+                    const audioUrl = data.data.music;
+
+                    document.getElementById('tiktok-video').src = videoUrl;
+                    document.getElementById('video-container').style.display = 'block';
+
+                    document.getElementById('download-video').onclick = function () {
+                        let a = document.createElement('a');
+                        a.href = videoUrl;
+                        a.download = "tiktok-video.mp4";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    document.getElementById('download-audio').onclick = function () {
+                        let a = document.createElement('a');
+                        a.href = audioUrl;
+                        a.download = "tiktok-audio.mp3";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                } else {
+                    alert("ভিডিও লোড করতে সমস্যা হয়েছে!");
+                }
+            } catch (error) {
+                alert("লিঙ্কটি যাচাই করে দেখুন।");
+            }
+        }
+
+        function redirectToTelegram() {
+            window.location.href = "https://t.me/MRMOMIN112";
+        }
+    </script>
+
+</body>
+</html>
